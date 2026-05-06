@@ -2454,5 +2454,69 @@ updateStandings();
 
 setInterval(updateStandings, 60000);
 </script>
+
+<script>
+window.addEventListener("load", () => {
+
+  // =========================
+  // LIVE DRIVER STANDINGS
+  // =========================
+  async function updateStandings() {
+    try {
+
+      const response = await fetch(
+        "https://api.jolpi.ca/ergast/f1/current/driverStandings.json?ts=" + Date.now()
+      );
+
+      const data = await response.json();
+
+      const standings =
+        data?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings || [];
+
+      const rows = document.querySelectorAll(".driver-row");
+
+      rows.forEach((row, index) => {
+
+        const d = standings[index];
+        if (!d) return;
+
+        const name = row.querySelector(".driver-name");
+        if (name) {
+          name.textContent =
+            `${d.Driver.givenName} ${d.Driver.familyName}`;
+        }
+
+        const code = row.querySelector(".driver-code");
+        if (code) {
+          code.textContent = d.Driver.code || "";
+        }
+
+        const team = row.querySelector(".driver-team");
+        if (team) {
+          team.innerHTML =
+            `${d.Constructors[0].name} <span class="gap">• LIVE</span>`;
+        }
+
+        const pts = row.querySelector(".driver-pts");
+        if (pts) {
+          pts.textContent = d.points;
+        }
+
+      });
+
+      console.log("LIVE STANDINGS UPDATED");
+
+    } catch (err) {
+      console.error("LIVE API FAILED:", err);
+    }
+  }
+
+  updateStandings();
+
+  setInterval(updateStandings, 60000);
+
+});
+</script>
+
 </body>
 </html>
