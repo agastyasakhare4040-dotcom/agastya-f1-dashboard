@@ -2739,7 +2739,75 @@ async function loadLiveF1Dashboard() {
 
       });
 
-    console.log('F1 DASHBOARD LIVE');
+    
+    // LIVE CALENDAR
+    const calRes = await fetch(
+      'https://api.jolpi.ca/ergast/f1/current.json'
+    );
+
+    const calJson = await calRes.json();
+
+    const races =
+      calJson.MRData.RaceTable.Races;
+
+    const cal =
+      document.getElementById('live-calendar');
+
+    if(cal){
+
+      const nowDate = new Date();
+
+      cal.innerHTML = '';
+
+      races.forEach((race,index)=>{
+
+        const raceDate =
+          new Date(race.date);
+
+        let cls = 'cal-round';
+
+        if(raceDate < nowDate){
+          cls += ' done';
+        }
+
+        if(index > 0){
+
+          const prevRace =
+            new Date(races[index-1].date);
+
+          if(prevRace < nowDate && raceDate > nowDate){
+            cls += ' next';
+          }
+        }
+
+        cal.innerHTML += `
+          <div class="${cls}">
+
+            <div class="cal-rnum">
+              R${race.round}
+              <span class="cal-status-dot"></span>
+            </div>
+
+            <div class="cal-country">
+              ${race.Circuit.Location.country}
+            </div>
+
+            <div class="cal-flag-name">
+              ${race.raceName}
+            </div>
+
+            <div class="cal-date">
+              ${race.date}
+            </div>
+
+          </div>
+        `;
+
+      });
+
+    }
+
+console.log('F1 DASHBOARD LIVE');
 
   } catch(err){
 
