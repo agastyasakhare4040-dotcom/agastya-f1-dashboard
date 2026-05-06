@@ -2529,6 +2529,25 @@ window.addEventListener("load", () => {
 
       if (!nextRace) return;
 
+
+const raceNameEl = document.getElementById("live-race-name");
+
+if (raceNameEl) {
+  raceNameEl.textContent = nextRace.raceName;
+}
+
+const raceMetaEl = document.getElementById("live-race-meta");
+
+if (raceMetaEl) {
+  raceMetaEl.textContent =
+    nextRace.Circuit.circuitName +
+    " • " +
+    nextRace.Circuit.Location.locality +
+    ", " +
+    nextRace.Circuit.Location.country;
+}
+
+
       // =============================
       // UPDATE RACE TITLE
       // =============================
