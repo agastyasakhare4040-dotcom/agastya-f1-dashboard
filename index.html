@@ -1813,8 +1813,8 @@ body {
           <span class="race-round">◆ Round 04 · Up Next</span>
           <span class="race-flag-big">🇺🇸</span>
         </div>
-        <h2 class="race-name">Miami <em>Grand Prix</em></h2>
-        <div class="race-circuit"><strong>Miami International Autodrome</strong> · Hard Rock Stadium</div>
+        <h2 class="race-name" id="live-race-name">Loading...</h2>
+        <div class="race-circuit" id="live-race-meta">Loading...</div>
         <div class="race-circuit">Round 4 of 23 · 57 laps · 308.326 km</div>
 
         <div class="race-stats">
@@ -2528,6 +2528,30 @@ window.addEventListener("load", () => {
       }
 
       if (!nextRace) return;
+
+
+const raceNameEl = document.getElementById("live-race-name");
+
+if (raceNameEl) {
+  raceNameEl.innerHTML =
+    nextRace.raceName.replace(
+      "Grand Prix",
+      "<em>Grand Prix</em>"
+    );
+}
+
+const raceMetaEl = document.getElementById("live-race-meta");
+
+if (raceMetaEl) {
+  raceMetaEl.innerHTML =
+    "<strong>" +
+    nextRace.Circuit.circuitName +
+    "</strong> · " +
+    nextRace.Circuit.Location.locality +
+    ", " +
+    nextRace.Circuit.Location.country;
+}
+
 
 
 const raceNameEl = document.getElementById("live-race-name");
