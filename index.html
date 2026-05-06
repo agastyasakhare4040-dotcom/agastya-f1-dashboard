@@ -86,10 +86,10 @@
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 
 :root {
-  --carbon:     #050816;
-  --carbon-2:   #0A1633;
-  --carbon-3:   #122850;
-  --paper:      #eaf3ff;
+  --carbon:     #0a0a0a;
+  --carbon-2:   #131313;
+  --carbon-3:   #1d1d1d;
+  --paper:      #f2ece0;
   --paper-2:    #e8e1d2;
   --paper-3:    #d8d0bf;
   --ink:        #0a0a0a;
@@ -1672,94 +1672,6 @@ body.colo-open { overflow: hidden; }
   font-size: 11px;
 }
 
-
-/* ===== AGASTYA RED BULL ORACLE EDITION ===== */
-
-body {
-  background:
-    radial-gradient(circle at top right, rgba(0,166,255,0.10), transparent 25%),
-    radial-gradient(circle at bottom left, rgba(0,51,160,0.14), transparent 30%),
-    var(--paper);
-}
-
-.hero,
-.race-block,
-.stats-grid,
-.golive-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before,
-.race-block::before,
-.stats-grid::before {
-  content:'';
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(135deg,
-      rgba(255,255,255,0.03) 0%,
-      rgba(0,166,255,0.06) 25%,
-      transparent 60%);
-  pointer-events:none;
-}
-
-.live-badge,
-.race-round,
-.news-kicker,
-.golive-cta-primary {
-  background: linear-gradient(135deg, #0033A0, #00A6FF);
-  box-shadow:
-    0 0 18px rgba(0,166,255,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.18);
-}
-
-.title-underline,
-.cal-progress-fill,
-.stat::after {
-  background: linear-gradient(90deg, #0033A0, #00A6FF);
-}
-
-.hero-title .line2 {
-  color: #00A6FF;
-  text-shadow: 0 0 24px rgba(0,166,255,0.25);
-}
-
-.driver-row:hover,
-.con-row:hover,
-.news-item:hover,
-.cal-round:hover {
-  box-shadow: inset 0 0 0 1px rgba(0,166,255,0.25);
-}
-
-.race-block {
-  border-top: 5px solid #00A6FF;
-  box-shadow:
-    0 20px 50px rgba(0,51,160,0.28),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.cd-cell,
-.stat,
-.con-row,
-.driver-row {
-  backdrop-filter: blur(10px);
-}
-
-.hero-title .line1 span::after {
-  content:' 🏁';
-  font-size:0.3em;
-  vertical-align:middle;
-}
-
-.greeting::after {
-  content:' · Oracle Red Bull Racing Fan';
-  color:#00A6FF;
-  font-style:normal;
-  font-size:0.85em;
-}
-
-
 </style>
 </head>
 <body>
@@ -1813,8 +1725,8 @@ body {
           <span class="race-round">◆ Round 04 · Up Next</span>
           <span class="race-flag-big">🇺🇸</span>
         </div>
-        <h2 class="race-name" id="live-race-name">Loading...</h2>
-        <div class="race-circuit" id="live-race-meta">Loading...</div>
+        <h2 class="race-name">Miami <em>Grand Prix</em></h2>
+        <div class="race-circuit"><strong>Miami International Autodrome</strong> · Hard Rock Stadium</div>
         <div class="race-circuit">Round 4 of 23 · 57 laps · 308.326 km</div>
 
         <div class="race-stats">
@@ -1824,7 +1736,7 @@ body {
           </div>
           <div class="race-stat">
             <div class="race-stat-label">Pole 2025</div>
-            <div class="race-stat-val">MAX VERSTAPPEN</div>
+            <div class="race-stat-val">M. Verstappen</div>
           </div>
           <div class="race-stat">
             <div class="race-stat-label">Dates</div>
@@ -1935,7 +1847,7 @@ body {
       </div>
       <div class="driver-row" style="--team-color: var(--redbull); animation-delay:5.14s;">
         <div class="driver-pos">09</div>
-        <div class="driver-info"><div class="driver-line"><span class="driver-name">MAX VERSTAPPEN</span><span class="driver-code" style="background:var(--redbull);">VER</span></div><div class="driver-team">Red Bull · NED · <span class="gap">−60</span></div></div>
+        <div class="driver-info"><div class="driver-line"><span class="driver-name">M. Verstappen</span><span class="driver-code" style="background:var(--redbull);">VER</span></div><div class="driver-team">Red Bull · NED · <span class="gap">−60</span></div></div>
         <div class="driver-pts-wrap"><div class="driver-pts">12</div><div class="driver-pts-sub">pts</div></div>
       </div>
       <div class="driver-row" style="--team-color: var(--racingbulls); animation-delay:5.22s;">
@@ -2296,7 +2208,23 @@ Return the COMPLETE HTML in one code block. Preserve every
   document.getElementById('dateline').textContent = D[now.getDay()] + ' · ' + String(now.getDate()).padStart(2,'0') + ' ' + M[now.getMonth()] + ' · ' + now.getFullYear();
 })();
 
-
+(function(){
+  const target = new Date('2026-05-03T20:00:00Z').getTime();
+  const pad = (n) => String(n).padStart(2,'0');
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+    document.getElementById('cd-d').textContent = pad(Math.floor(diff / 86400000));
+    document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+    document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+    document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
 (function(){
   const items = [
@@ -2353,472 +2281,5 @@ Return the COMPLETE HTML in one code block. Preserve every
   });
 })();
 </script>
-
-<script>
-(async function () {
-  try {
-    const r = await fetch('https://api.jolpi.ca/ergast/f1/current/driverStandings.json');
-    const j = await r.json();
-    const list = j.MRData.StandingsTable.StandingsLists[0]?.DriverStandings || [];
-
-    document.querySelectorAll('.driver-row').forEach((row, i) => {
-      const d = list[i];
-      if (!d) return;
-
-      const pts = row.querySelector('.driver-pts');
-      if (pts) pts.textContent = d.points;
-
-      const driverName = row.querySelector('.driver-name');
-      if (driverName) {
-        driverName.textContent = `${d.Driver.givenName} ${d.Driver.familyName}`;
-      }
-
-      const driverCode = row.querySelector('.driver-code');
-      if (driverCode) {
-        driverCode.textContent = d.Driver.code || '';
-      }
-
-      const team = row.querySelector('.driver-team');
-      if (team) {
-        team.innerHTML = `${d.Constructors[0].name} <span class="gap">• Live</span>`;
-      }
-    });
-
-  } catch (e) {
-    console.log('Jolpica API unavailable, using static data.');
-  }
-})();
-</script>
-<script>
-async function updateStandings() {
-  try {
-    const response = await fetch(
-      'https://api.jolpi.ca/ergast/f1/current/driverStandings.json?ts=' + Date.now()
-    );
-
-    const data = await response.json();
-
-    const standings =
-      data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
-
-    const rows = document.querySelectorAll('.driver-row');
-
-    rows.forEach((row, index) => {
-      const d = standings[index];
-      if (!d) return;
-
-      const name = row.querySelector('.driver-name');
-      const code = row.querySelector('.driver-code');
-      const team = row.querySelector('.driver-team');
-      const pts = row.querySelector('.driver-pts');
-
-      if (name)
-        name.textContent =
-          d.Driver.givenName + ' ' + d.Driver.familyName;
-
-      if (code)
-        code.textContent = d.Driver.code || '';
-
-      if (team)
-        team.innerHTML =
-          d.Constructors[0].name +
-          ' <span class="gap">• LIVE</span>';
-
-      if (pts)
-        pts.textContent = d.points;
-    });
-
-    console.log('Live standings updated');
-  } catch (err) {
-    console.error('Standings fetch failed:', err);
-  }
-}
-
-updateStandings();
-
-setInterval(updateStandings, 60000);
-</script>
-
-
-
-
-<script>
-window.addEventListener("load", () => {
-
-  // ======================================
-  // FULLY LIVE F1 DASHBOARD SYSTEM
-  // ======================================
-
-  async function loadLiveF1Data() {
-
-    try {
-
-      // =============================
-      // DRIVER STANDINGS
-      // =============================
-      const standingsRes = await fetch(
-        "https://api.jolpi.ca/ergast/f1/current/driverStandings.json?ts=" + Date.now()
-      );
-
-      const standingsData = await standingsRes.json();
-
-      const standings =
-        standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings || [];
-
-      const rows = document.querySelectorAll(".driver-row");
-
-      rows.forEach((row, index) => {
-
-        const d = standings[index];
-        if (!d) return;
-
-        const name = row.querySelector(".driver-name");
-        const code = row.querySelector(".driver-code");
-        const team = row.querySelector(".driver-team");
-        const pts = row.querySelector(".driver-pts");
-
-        if (name) {
-          name.textContent =
-            `${d.Driver.givenName} ${d.Driver.familyName}`;
-        }
-
-        if (code) {
-          code.textContent = d.Driver.code || "";
-        }
-
-        if (team) {
-          team.innerHTML =
-            `${d.Constructors[0].name} <span class="gap">• LIVE</span>`;
-        }
-
-        if (pts) {
-          pts.textContent = d.points;
-        }
-
-      });
-
-      // =============================
-      // NEXT RACE DATA
-      // =============================
-      const raceRes = await fetch(
-        "https://api.jolpi.ca/ergast/f1/current.json?ts=" + Date.now()
-      );
-
-      const raceData = await raceRes.json();
-
-      const races = raceData?.MRData?.RaceTable?.Races || [];
-
-      const now = new Date();
-
-      let nextRace = null;
-
-      for (const race of races) {
-
-        const raceDate = new Date(
-          race.date + "T" + (race.time || "12:00:00Z")
-        );
-
-        if (raceDate > now) {
-          nextRace = {
-            ...race,
-            dateObj: raceDate
-          };
-          break;
-        }
-      }
-
-      if (!nextRace) return;
-
-      // =============================
-      // UPDATE RACE TITLE
-      // =============================
-      const titleEl = document.querySelector(".race-title");
-
-      if (titleEl) {
-        titleEl.innerHTML =
-          `${nextRace.raceName.replace("Grand Prix", "")} <em>Grand Prix</em>`;
-      }
-
-      // =============================
-      // UPDATE TRACK / CIRCUIT
-      // =============================
-      const metaEl = document.querySelector(".race-meta");
-
-      if (metaEl) {
-        metaEl.innerHTML =
-          `${nextRace.Circuit.circuitName} • ${nextRace.Circuit.Location.locality}, ${nextRace.Circuit.Location.country}`;
-      }
-
-      // =============================
-      // UPDATE DATE DISPLAY
-      // =============================
-      const dateEl = document.querySelector(".race-date");
-
-      if (dateEl) {
-
-        const rd = new Date(nextRace.date);
-
-        dateEl.textContent =
-          rd.toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric"
-          });
-      }
-
-      // =============================
-      // LIVE COUNTDOWN
-      // =============================
-      function updateCountdown() {
-
-        const diff = nextRace.dateObj - new Date();
-
-        if (diff <= 0) return;
-
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-
-        const set = (id, val) => {
-          const el = document.getElementById(id);
-          if (el) el.textContent = String(val).padStart(2, "0");
-        };
-
-        set("cd-d", d);
-        set("cd-h", h);
-        set("cd-m", m);
-        set("cd-s", s);
-      }
-
-      updateCountdown();
-
-      setInterval(updateCountdown, 1000);
-
-      console.log("FULL LIVE F1 DASHBOARD ACTIVE");
-
-    } catch (err) {
-
-      console.error("LIVE F1 SYSTEM FAILED:", err);
-
-    }
-  }
-
-  loadLiveF1Data();
-
-  // refresh standings every minute
-  setInterval(loadLiveF1Data, 60000);
-
-});
-</script>
-
-
-<script>
-async function loadLiveF1Dashboard() {
-
-  try {
-
-    // NEXT RACE
-    const raceRes = await fetch(
-      'https://api.jolpi.ca/ergast/f1/current/next.json'
-    );
-
-    const raceJson = await raceRes.json();
-
-    const nextRace =
-      raceJson.MRData.RaceTable.Races[0];
-
-    if(nextRace){
-
-      const raceName =
-        document.getElementById('live-race-name');
-
-      if(raceName){
-
-        raceName.innerHTML =
-          nextRace.raceName.replace(
-            'Grand Prix',
-            '<em>Grand Prix</em>'
-          );
-      }
-
-      const raceMeta =
-        document.getElementById('live-race-meta');
-
-      if(raceMeta){
-
-        raceMeta.innerHTML =
-          '<strong>' +
-          nextRace.Circuit.circuitName +
-          '</strong> · ' +
-          nextRace.Circuit.Location.locality +
-          ', ' +
-          nextRace.Circuit.Location.country;
-      }
-
-      const targetDate =
-        new Date(
-          nextRace.date +
-          'T' +
-          (nextRace.time || '00:00:00Z')
-        ).getTime();
-
-      function updateCountdown(){
-
-        const now = Date.now();
-
-        const diff =
-          targetDate - now;
-
-        if(diff <= 0) return;
-
-        const d =
-          Math.floor(diff / 86400000);
-
-        const h =
-          Math.floor((diff % 86400000) / 3600000);
-
-        const m =
-          Math.floor((diff % 3600000) / 60000);
-
-        const s =
-          Math.floor((diff % 60000) / 1000);
-
-        const set = (id,val) => {
-
-          const el =
-            document.getElementById(id);
-
-          if(el){
-            el.textContent =
-              String(val).padStart(2,'0');
-          }
-        };
-
-        set('cd-d', d);
-        set('cd-h', h);
-        set('cd-m', m);
-        set('cd-s', s);
-
-      }
-
-      updateCountdown();
-
-      setInterval(updateCountdown,1000);
-
-    }
-
-    // DRIVER STANDINGS
-    const standingsRes = await fetch(
-      'https://api.jolpi.ca/ergast/f1/current/driverStandings.json'
-    );
-
-    const standingsJson =
-      await standingsRes.json();
-
-    const standings =
-      standingsJson
-      .MRData
-      .StandingsTable
-      .StandingsLists[0]
-      .DriverStandings;
-
-    document
-      .querySelectorAll('.driver-row')
-      .forEach((row,i)=>{
-
-        const d = standings[i];
-
-        if(!d) return;
-
-        const pts =
-          row.querySelector('.driver-pts');
-
-        if(pts){
-          pts.textContent = d.points;
-        }
-
-      });
-
-    
-    // LIVE CALENDAR
-    const calRes = await fetch(
-      'https://api.jolpi.ca/ergast/f1/current.json'
-    );
-
-    const calJson = await calRes.json();
-
-    const races =
-      calJson.MRData.RaceTable.Races;
-
-    const cal =
-      document.getElementById('live-calendar');
-
-    if(cal){
-
-      const nowDate = new Date();
-
-      cal.innerHTML = '';
-
-      races.forEach((race,index)=>{
-
-        const raceDate =
-          new Date(race.date);
-
-        let cls = 'cal-round';
-
-        if(raceDate < nowDate){
-          cls += ' done';
-        }
-
-        if(index > 0){
-
-          const prevRace =
-            new Date(races[index-1].date);
-
-          if(prevRace < nowDate && raceDate > nowDate){
-            cls += ' next';
-          }
-        }
-
-        cal.innerHTML += `
-          <div class="${cls}">
-
-            <div class="cal-rnum">
-              R${race.round}
-              <span class="cal-status-dot"></span>
-            </div>
-
-            <div class="cal-country">
-              ${race.Circuit.Location.country}
-            </div>
-
-            <div class="cal-flag-name">
-              ${race.raceName}
-            </div>
-
-            <div class="cal-date">
-              ${race.date}
-            </div>
-
-          </div>
-        `;
-
-      });
-
-    }
-
-console.log('F1 DASHBOARD LIVE');
-
-  } catch(err){
-
-    console.error(err);
-
-  }
-
-}
-
-loadLiveF1Dashboard();
-</script>
-
 </body>
 </html>
