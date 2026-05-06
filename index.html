@@ -1,73 +1,349 @@
 <!DOCTYPE html>
-  drivers.slice(0,10).forEach(d => {
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agastya's Pit Wall</title>
 
-    driverBox.innerHTML += `
-      <div class="standing-row">
-        <span>
-          ${d.position}. ${d.Driver.givenName} ${d.Driver.familyName}
-        </span>
-        <strong>${d.points}</strong>
-      </div>
-    `;
-  });
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
 
-  // CONSTRUCTORS
-  const csRes = await fetch(
-    'https://api.jolpi.ca/ergast/f1/current/constructorStandings.json'
-  );
+body{
+background:#f5f5f5;
+color:#111;
+padding:40px;
+}
 
-  const csJson = await csRes.json();
+h1{
+font-size:60px;
+margin-bottom:40px;
+}
 
-  const teams = csJson.MRData
-    .StandingsTable
-    .StandingsLists[0]
-    .ConstructorStandings;
+.hero{
+background:#0b1020;
+color:white;
+padding:40px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
 
-  const teamBox = document.getElementById('constructor-standings');
+.hero-left h2{
+font-size:50px;
+margin-bottom:10px;
+}
 
-  teamBox.innerHTML = '';
+.hero-left p{
+opacity:.8;
+}
 
-  teams.forEach(t => {
+.countdown{
+display:flex;
+gap:15px;
+}
 
-    teamBox.innerHTML += `
-      <div class="standing-row">
-        <span>${t.position}. ${t.Constructor.name}</span>
-        <strong>${t.points}</strong>
-      </div>
-    `;
-  });
+.cd-box{
+background:#1d4ed8;
+padding:20px;
+border-radius:12px;
+min-width:100px;
+text-align:center;
+}
 
-  // CALENDAR
-  const calendar = document.getElementById('calendar');
+.cd-box h3{
+font-size:42px;
+}
 
-  calendar.innerHTML = '';
+.section{
+background:white;
+padding:30px;
+border-radius:20px;
+margin-bottom:30px;
+}
 
-  races.forEach(r => {
+.section h2{
+margin-bottom:20px;
+}
 
-    calendar.innerHTML += `
-      <div class="standing-row">
-        <span>${r.raceName}</span>
-        <span>${r.date}</span>
-      </div>
-    `;
-  });
+.standing-row{
+display:flex;
+justify-content:space-between;
+padding:12px 0;
+border-bottom:1px solid #eee;
+}
 
-  // NEWS
-  const news = document.getElementById('news-feed');
+.news-card{
+padding:15px;
+background:#fafafa;
+border-radius:12px;
+margin-bottom:12px;
+}
 
-  news.innerHTML = `
-    <div class="news-item">
-      Max Verstappen continues leading Oracle Red Bull Racing.
-    </div>
+.calendar-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:15px;
+}
 
-    <div class="news-item">
-      Formula 1 season automatically updating live.
-    </div>
+.race-card{
+background:#fafafa;
+padding:15px;
+border-radius:12px;
+}
 
-    <div class="news-item">
-      Dashboard powered by Jolpica Ergast API.
-    </div>
-  `;
+.loading{
+opacity:.6;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Agastya's Pit Wall.</h1>
+
+<div class="hero">
+
+<div class="hero-left">
+<div id="race-round">ROUND --</div>
+<h2 id="race-name">Loading...</h2>
+<p id="race-location">Loading...</p>
+</div>
+
+<div class="countdown">
+
+<div class="cd-box">
+<h3 id="days">00</h3>
+<p>DAYS</p>
+</div>
+
+<div class="cd-box">
+<h3 id="hours">00</h3>
+<p>HOURS</p>
+</div>
+
+<div class="cd-box">
+<h3 id="mins">00</h3>
+<p>MINS</p>
+</div>
+
+<div class="cd-box">
+<h3 id="secs">00</h3>
+<p>SECS</p>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<h2>Season Calendar</h2>
+<div class="calendar-grid" id="calendar">
+<div class="loading">Loading races...</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Drivers Championship</h2>
+<div id="driver-standings">
+<div class="loading">Loading standings...</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Constructors Championship</h2>
+<div id="constructor-standings">
+<div class="loading">Loading constructors...</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Latest F1 News</h2>
+
+<div class="news-card">
+Mercedes pushing major upgrades for upcoming races.
+</div>
+
+<div class="news-card">
+Ferrari preparing new aero package for Canada GP.
+</div>
+
+<div class="news-card">
+Red Bull confident after latest performance gains.
+</div>
+
+</div>
+
+<script>
+
+console.log("FULL LIVE F1 DASHBOARD ACTIVE");
+
+async function loadDashboard(){
+
+try{
+
+const raceRes = await fetch(
+'https://api.jolpi.ca/ergast/f1/current/next.json'
+);
+
+const raceJson = await raceRes.json();
+
+const race =
+raceJson.MRData.RaceTable.Races[0];
+
+document.getElementById('race-round').innerText =
+`ROUND ${race.round}`;
+
+document.getElementById('race-name').innerText =
+`${race.raceName}`;
+
+document.getElementById('race-location').innerText =
+`${race.Circuit.circuitName} • ${race.Circuit.Location.country}`;
+
+const raceDate = new Date(
+race.date + "T" + (race.time || "00:00:00Z")
+).getTime();
+
+function updateCountdown(){
+
+const now = new Date().getTime();
+const distance = raceDate - now;
+
+if(distance < 0){
+return;
+}
+
+const d = Math.floor(distance / (1000*60*60*24));
+const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const m = Math.floor((distance%(1000*60*60))/(1000*60));
+const s = Math.floor((distance%(1000*60))/1000);
+
+document.getElementById('days').innerText =
+String(d).padStart(2,'0');
+
+document.getElementById('hours').innerText =
+String(h).padStart(2,'0');
+
+document.getElementById('mins').innerText =
+String(m).padStart(2,'0');
+
+document.getElementById('secs').innerText =
+String(s).padStart(2,'0');
+
+}
+
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+const calRes = await fetch(
+'https://api.jolpi.ca/ergast/f1/current.json'
+);
+
+const calJson = await calRes.json();
+
+const races =
+calJson.MRData.RaceTable.Races;
+
+const calendar =
+document.getElementById('calendar');
+
+calendar.innerHTML = '';
+
+races.forEach(r=>{
+
+calendar.innerHTML += `
+<div class="race-card">
+<strong>${r.raceName}</strong>
+<p>${r.Circuit.Location.country}</p>
+<p>${r.date}</p>
+</div>
+`;
+
+});
+
+const standingsRes = await fetch(
+'https://api.jolpi.ca/ergast/f1/current/driverStandings.json'
+);
+
+const standingsJson =
+await standingsRes.json();
+
+const drivers =
+standingsJson
+.MRData
+.StandingsTable
+.StandingsLists[0]
+.DriverStandings;
+
+const driverBox =
+document.getElementById('driver-standings');
+
+driverBox.innerHTML = '';
+
+drivers.forEach(d=>{
+
+driverBox.innerHTML += `
+<div class="standing-row">
+<span>
+${d.position}. ${d.Driver.givenName} ${d.Driver.familyName}
+</span>
+<strong>${d.points}</strong>
+</div>
+`;
+
+});
+
+const constructorsRes = await fetch(
+'https://api.jolpi.ca/ergast/f1/current/constructorStandings.json'
+);
+
+const constructorsJson =
+await constructorsRes.json();
+
+const teams =
+constructorsJson
+.MRData
+.StandingsTable
+.StandingsLists[0]
+.ConstructorStandings;
+
+const constructorBox =
+document.getElementById('constructor-standings');
+
+constructorBox.innerHTML = '';
+
+teams.forEach(t=>{
+
+constructorBox.innerHTML += `
+<div class="standing-row">
+<span>
+${t.position}. ${t.Constructor.name}
+</span>
+<strong>${t.points}</strong>
+</div>
+`;
+
+});
+
+console.log("LIVE DATA LOADED");
+
+}catch(err){
+
+console.error(err);
+
+document.body.innerHTML += `
+<div style="padding:20px;color:red;">
+Failed to load F1 API
+</div>
+`;
+
+}
+
 }
 
 loadDashboard();
